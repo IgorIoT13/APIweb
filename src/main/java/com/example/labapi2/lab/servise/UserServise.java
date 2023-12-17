@@ -8,8 +8,10 @@ import com.example.labapi2.lab.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServise {
@@ -65,6 +67,25 @@ public class UserServise {
         }
 
 
+    }
+
+
+    public List<UserEntity> getFilteredEntity(String type, String title, int max) {
+        List<UserEntity> list = userRepo.findByTitleLikeIgnoreCase(title + "%");;
+
+        List<UserEntity> filteredList = list.stream()
+                .filter(userEntity -> userEntity.getFuel() < max)
+                .toList();
+
+        if ("Title".equals(type)) {
+            return filteredList.stream()
+                    .sorted(Comparator.comparing(UserEntity::getTitle))
+                    .collect(Collectors.toList());
+        } else {
+            return filteredList.stream()
+                    .sorted(Comparator.comparing(UserEntity::getFuel))
+                    .collect(Collectors.toList());
+        }
     }
 
 }

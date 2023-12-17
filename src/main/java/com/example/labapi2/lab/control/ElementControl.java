@@ -73,6 +73,18 @@ public class ElementControl {
     }
 
 
+    @RequestMapping("/filter")
+    @GetMapping
+    public ResponseEntity FilterEl(@RequestParam String type, @RequestParam String title, @RequestParam int max) {
+        try {
+            List<UserEntity> listObj = userServise.getFilteredEntity(type, title, max);
+            return ResponseEntity.ok().body(listObj);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+
 
 
 
@@ -86,6 +98,7 @@ public class ElementControl {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
 
 
 
